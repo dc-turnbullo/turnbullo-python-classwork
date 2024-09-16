@@ -1,15 +1,27 @@
+# Importing the library
 import pygame
 
+# Initializing Pygame
+pygame.init()
 
-background_colour = (234, 212, 252) 
-screen = pygame.display.set_mode((300, 300)) 
-pygame.display.set_caption('Gomez is short') 
-screen.fill(background_colour) 
-pygame.display.flip() 
+# Initializing surface
+surface = pygame.display.set_mode((400,300))
 running = True
+# Initializing Color
+color = (255,0,0)
+# Variable to keep our game loop running 
+running = True
+rectangle = pygame.draw.rect(surface, color, pygame.Rect(30, 30, 60, 60))
+# game loop 
 while running: 
-    for event in pygame.event.get():      
+    
+# for loop through the event queue   
+    for event in pygame.event.get(): 
+      
+        # Check for QUIT event       
         if event.type == pygame.QUIT: 
             running = False
     
-    pygame.draw.rect(10)
+    pygame.display.flip()
+
+
