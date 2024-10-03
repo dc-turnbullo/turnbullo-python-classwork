@@ -11,10 +11,12 @@ running = True
 color = (255,0,0)
 # Variable to keep our game loop running 
 running = True
-rectangle = pygame.draw.rect(surface, color, pygame.Rect(30, 30, 60, 60))
+class player(object):
+    def __init__(self) -> None:
+        self.rectangle = pygame.draw.rect(surface, color, pygame.Rect(30, 30, 60, 60))
 # game loop 
 while running: 
-    
+    self.rectangle.move(10,0)
 # for loop through the event queue   
     for event in pygame.event.get(): 
       
