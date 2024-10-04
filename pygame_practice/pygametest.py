@@ -16,7 +16,7 @@ class player(object):
         self.rectangle = pygame.draw.rect(surface, color, pygame.Rect(30, 30, 60, 60))
 # game loop 
 while running: 
-    self.rectangle.move(10,0)
+    player.rectangle.move(10,0)
 # for loop through the event queue   
     for event in pygame.event.get(): 
       
