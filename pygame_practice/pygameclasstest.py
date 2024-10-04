@@ -30,6 +30,7 @@ while not done:
     if rtx >= 680 or rtx <= 0:
         movement = movement * -1
         brx += 5
+        bry += 5
         if movement < 0:
             movement -=1
         else: 
@@ -37,6 +38,7 @@ while not done:
     if rty <=0 or rty >= 390:
         movementy *= -1
         bry += 5
+        brx +=5
         if movementy < 0:
             movementy -=1
         else: 
