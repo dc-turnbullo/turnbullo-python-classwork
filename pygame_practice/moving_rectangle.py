@@ -14,7 +14,7 @@ rtx = 55
 rty = 50
 brx = 20
 bry = 25
-movement= 10
+movement= 5
 movementy = 10
 while not done:
     for event in pygame.event.get(): 
@@ -26,23 +26,13 @@ while not done:
     if event.type == pygame.MOUSEBUTTONDOWN:
         rtx +=movement
     if event.type == pygame.KEYDOWN:
-        rty +=movementy
-    if rtx >= 680 or rtx <= 0:
-        movement = movement * -1
-        brx += 5
-        bry += 5
-        if movement < 0:
-            movement -=1
-        else: 
-            movement +=1
-    if rty <=0 or rty >= 390:
-        movementy *= -1
-        bry += 5
-        brx +=5
-        if movementy < 0:
-            movementy -=1
-        else: 
-            movementy +=1
+        rtx +=movement
+    if rtx >= 680:
+        rtx = 0
+
+    rtx += movement
+    if rtx>= 680:
+        rtx = 0
     pygame.display.flip()
 
     
