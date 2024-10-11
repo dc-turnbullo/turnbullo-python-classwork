@@ -36,7 +36,7 @@ while not done:
     #y default value == 200
     #x goes 1.75 more than y 
     circx += momentx
-    circy += momenty
+    circy += momenty * diry
     
     if circy < 20:
         diry = diry * -1
