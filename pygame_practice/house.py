@@ -16,12 +16,13 @@ pygame.display.set_caption("Is he short or is he not short")
 Pi = 3.14120973109278509710293840917235091789287907153908910829371735290
 circx = 700
 circy = 200
-momenty = ((1/100000) * (circx**2) +1) 
-momentx = -1.75
+momenty = -70
+momentx = -110
 yvelo = -1
 up = True
 dirx = 1
-diry = -1
+diry = 1
+grav = 1
 while not done:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
@@ -35,17 +36,17 @@ while not done:
     #x default value  == 700
     #y default value == 200
     #x goes 1.75 more than y 
-    circx += momentx * dirx
-    circy += momenty * diry
-    momenty = ((1/100000) * (circx**2) +20) 
-    pygame.draw.arc(screen, (255,255,255), [50,50,50,50], Pi/2, Pi, 2)
+    circx += (momentx * dirx)//32
+    circy += (momenty * diry)//32
+    
     if circy < 20:
         diry = diry * -1
     
+    momenty = momenty + grav
+    
     if circx < 0:
         circx = 700
-        dirx = dirx * -1
-        diry = diry * -1
+        momenty = -70
     
 
     
