@@ -1,4 +1,5 @@
 import pygame
+import random
 pygame.init()
 
 size = (700, 400)
@@ -16,6 +17,7 @@ bally = 200
 balldirx = 1
 balldiry = -1
 ballspeed = 2
+yballspeed = 2
 #p1 = paddel 1  tl top left x or y refer to axis
 font = pygame.font.SysFont('Calibri', 25, True, False)
 
@@ -25,16 +27,27 @@ p1tlx = 10
 p1tly = 150
 p1xlen = 20
 p1ylen = 70
-
+Bounced = False
 p2tlx = 670
 p2tly = 150
 p2xlen = 20
 p2ylen = 70
 def resetball(ballspeed,ballx,bally):
-    ballspeed = 1
+    ballspeed = 2
     ballx = 350
     bally = 200
     return ballspeed,ballx,bally
+
+
+def resetbounce(ballx,Bounced):
+    if ballx > 200 and ballx < 500:
+        Bounced = False
+    return Bounced
+
+def randballspeed(xballspeed,yballspeed):
+    xballspeed = random.randint(5,10)
+    yballspeed = random.randint(5,10)
+    return xballspeed,yballspeed
 
 def p2movedown(p2tly):
     p2tly+=5
@@ -76,23 +89,27 @@ while not done:
     pygame.draw.rect(screen, blue, [p2tlx, p2tly, p2xlen, p2ylen], 0)
     
     ballx = ballx +(ballspeed * balldirx)
-    bally = bally + (ballspeed * balldiry)
-    p1tly = p1tly + (ballspeed * balldiry)
+    bally = bally + (yballspeed * balldiry)
+    p1tly = p1tly + (yballspeed * balldiry)
     
-    if ((ballx+20) >= p2tlx and (ballx+20)<= p2tlx + p2xlen) and (bally >= p2tly and bally <= p2tly + p2ylen):
-        balldirx = balldirx * -1
-        ballspeed = ballspeed + 1
-        print("ball touched paddel")
-    
-    if ((ballx-20) >= p1tlx and (ballx-20)<= p1tlx + p1xlen) and (bally >= p1tly and bally <= p1tly + p1ylen):
-        balldirx = balldirx * -1
-        ballspeed = ballspeed + 1
-        print("ball touched paddel")
+    if Bounced ==False:
+        if ((ballx+20) >= p2tlx and (ballx+20)<= p2tlx + p2xlen) and (bally >= p2tly and bally <= p2tly + p2ylen):
+            balldirx = balldirx * -1
+            ballspeed = ballspeed + 0.5
+            print("ball touched paddel")
+            Bounced = True
+        if ((ballx-20) >= p1tlx and (ballx-20)<= p1tlx + p1xlen) and (bally >= p1tly and bally <= p1tly + p1ylen):
+            balldirx = balldirx * -1
+            ballspeed = ballspeed + 0.5
+            print("ball touched paddel")
+            Bounced = True
+
+    Bounced = resetbounce(ballx,Bounced)
     
     
     if bally <=0 or bally >= 400:
         balldiry *= -1
-        
+        ballspeed,yballspeed = randballspeed(ballspeed,yballspeed)
     
     text = font.render("Player 1 score: "+ str(p1score), p1score, True, red)
     text2 = font.render("Player 2 score: " + str(p2score), p2score, True, blue)
