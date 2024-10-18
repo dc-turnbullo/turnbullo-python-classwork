@@ -59,11 +59,8 @@ while not done:
     # above this, or they will be erased with this command.
 
     # If you want a background image, replace this clear with blit'ing the
-    # background image.
-
-
-    # --- Drawing code should go here
-    pygame.draw.rect(screen, WHITE, (flake_x,flake_y,5,5))  
+    for i in range(len(arr)):
+        pygame.draw.rect(screen, WHITE, (arr[i][0],arr[i][1],5,5))  
 
 
     # --- Go ahead and update the screen with what we've drawn.
