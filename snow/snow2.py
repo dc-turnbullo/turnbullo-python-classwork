@@ -4,7 +4,7 @@ import random
 # Define some colors
 BLACK = 0x000000
 WHITE = 0xFFFFFF
-
+yellow = (0xF1,0x23,0x45)
 flake_v = 1
 
 pygame.init()

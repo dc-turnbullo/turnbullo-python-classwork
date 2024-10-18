@@ -39,10 +39,10 @@ for row in range(rows):
 print(arr)  
 
 
-# Loop until the user clicks the close button.
+
 done = False
 
-# Used to manage how fast the screen updates
+
 clock = pygame.time.Clock()
 
 # -------- Main Program Loop -----------
@@ -73,6 +73,7 @@ while not done:
         else:
             pygame.draw.rect(screen, WHITE, (arr[i].x,arr[i].y,arr[i].size,arr[i].size))
             arr[i].x = arr[i].x -1
+
 
     
     pygame.display.flip()
