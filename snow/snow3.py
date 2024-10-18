@@ -28,7 +28,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Snow")
 
 
-rows = 250
+rows = 1000
 arr = [None for j in range(rows)]  
 
   
