@@ -6,7 +6,7 @@ size = (700, 400)
 screen = pygame.display.set_mode(size)
 done = False
 clock = pygame.time.Clock()
-fps = 60
+fps = 120
 white = (0xff, 0xff, 0xff)
 red = (0xff, 0, 0)
 black = (0x00,0x00,0x00)
@@ -130,6 +130,6 @@ while not done:
         ballspeed,ballx,bally = resetball(ballspeed,ballx,bally)
         p1tlx = 10
         p1tly = 150
-
+    
     pygame.display.flip()
 
