@@ -1,5 +1,6 @@
+### SRC - Good work, but read my comments?
 import pygame
-import math
+import math ### SRC - Did you use this for a previous version?
 pygame.init()
 
 size = (700, 400)
@@ -13,6 +14,7 @@ green = (0x00,0xff,0x00)
 brown = (0x96,0x4b,0x00)
 yellow = (0xff,0xff,0x00)
 pygame.display.set_caption("Is he short or is he not short")
+### SRC - you can use math.pi instead.
 Pi = 3.14120973109278509710293840917235091789287907153908910829371735290
 circx = 700
 circy = 200
@@ -27,6 +29,13 @@ while not done:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
             done = True 
+    ''' SRC - This code works, but typically you would put in a 
+        different order:
+        (1) Update variable values
+        (2) Black screen
+        (3) Draw shapes
+        (4) Clock.tick
+    '''
     clock.tick(fps)
     screen.fill(white)
     pygame.draw.rect(screen, red, [280, 300, 100, 140], 0)
