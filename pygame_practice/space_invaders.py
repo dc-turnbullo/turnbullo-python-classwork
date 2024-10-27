@@ -4,38 +4,44 @@ import random
 # Define some colors
 BLACK = 0x000000
 WHITE = 0xFFFFFF
-class Flake:
-    def __init__(self,x_pos,y_pos,velocity,size,movement) -> None:
+class bot:
+    def __init__(self,x_pos,y_pos,velocity,size) -> None:
         self.x = x_pos
         self.y = y_pos
         self.vel = velocity
         self.size = size
-        self.move = movement
     #endrecord
 
 
 
 
 
-flake_v = 1
+xcoord = 0
+ycoord = 100
+bot_v = 1
+count = 0
 
 pygame.init()
 
 # Set the width and height of the screen [width, height]
-size = (1400, 700)
+size = (700, 450)
 screen = pygame.display.set_mode(size)
 
-pygame.display.set_caption("Snow")
+pygame.display.set_caption("Space Invaders")
 
 
-rows = 1000
+rows = 287
 arr = [None for j in range(rows)]  
 
   
 
 for row in range(rows):  
-     arr[row] = Flake(random.randint(0,size[0]-1),random.randint(0,size[1]-1), random.randint(1,3),random.randint(0,10),random.randint(1,2))
+     arr[row] = bot(xcoord,ycoord,3,5)
      xcoord = xcoord + 15
+     if xcoord > 600:
+        xcoord = 0
+        ycoord = ycoord + 10
+     
 #next row       
 print(arr)  
 
@@ -53,27 +59,23 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    # --- Game logic should go here
-    for i in range(len(arr)):
-        if arr[i].y > size[1]:
-            arr[i].y = 0
-            arr[i].x = random.randint(0,size[0]-1)
-        else:
-            arr[i].y = arr[i].y + arr[i].vel
-    #next i
-
+    
 
     
     screen.fill(BLACK)
     
     for i in range(len(arr)):
-        rand = random.randint(1,2)
-        if arr[i].move & 2 == 0:
-            arr[i].x = arr[i].x +1
-            pygame.draw.rect(screen, WHITE, (arr[i].x,arr[i].y,arr[i].size,arr[i].size))  
-        else:
-            pygame.draw.rect(screen, WHITE, (arr[i].x,arr[i].y,arr[i].size,arr[i].size))
-            arr[i].x = arr[i].x -1
+            arr[i].x += bot_v
+    count  = count + 1
+
+    if count > 100:
+        count = 0
+        bot_v *= -1
+        for i in range(len(arr)):
+            arr[i].y += 20
+            
+    for i in range(len(arr)):
+        pygame.draw.rect(screen, WHITE, (arr[i].x,arr[i].y,arr[i].size,arr[i].size)) 
 
 
     
