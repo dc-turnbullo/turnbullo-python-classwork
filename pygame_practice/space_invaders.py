@@ -30,7 +30,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Space Invaders")
 
 
-rows = 287
+rows = 50
 arr = [None for j in range(rows)]  
 
   
@@ -44,6 +44,10 @@ for row in range(rows):
      
 #next row       
 print(arr)  
+
+def drawalien(xcoord,ycoord):
+    
+
 
 
 
