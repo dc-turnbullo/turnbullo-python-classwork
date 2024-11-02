@@ -45,7 +45,7 @@ for row in range(rows):
 #next row       
 print(arr)  
 
-def drawalien(xcoord,ycoord):
+
     
 
 
