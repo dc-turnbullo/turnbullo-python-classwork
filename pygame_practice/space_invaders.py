@@ -12,14 +12,21 @@ class bot:
         self.size = size
     #endrecord
 
+class projectile:
+    def __init__(self,x_pos,y_pos,on,size) -> None:
+        self.x = x_pos
+        self.y = y_pos
+        self.on = on
+        self.size = size
 
 
-
-
+counter = 0
 xcoord = 0
 ycoord = 100
 bot_v = 1
 count = 0
+playerx = 330
+playery = 430
 
 pygame.init()
 
@@ -32,8 +39,12 @@ pygame.display.set_caption("Space Invaders")
 
 rows = 50
 arr = [None for j in range(rows)]  
+project = [None for j in range(rows)]
 
-  
+
+for row in range(rows):  
+     project[row] = projectile(-100,900,0,5)
+     
 
 for row in range(rows):  
      arr[row] = bot(xcoord,ycoord,3,5)
@@ -46,8 +57,8 @@ for row in range(rows):
 print(arr)  
 
 
-    
-
+def spawnprojectile(project,counter):
+    pygame.draw.rect(screen, WHITE, (project[counter].x,project[counter].y,project[counter].size)) 
 
 
 
@@ -63,7 +74,18 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_RIGHT:
+            playerx +=1
+        elif event.key == pygame.K_LEFT:
+            playerx -=1
+        elif event.key == pygame.K_SPACE:
+           counter = spawnprojectile(project,counter)
+           print("true")
+
+    for i in range(rows):
+        project[i].y +=1
+        
 
     
     screen.fill(BLACK)
@@ -81,10 +103,11 @@ while not done:
     for i in range(len(arr)):
         pygame.draw.rect(screen, WHITE, (arr[i].x,arr[i].y,arr[i].size,arr[i].size)) 
 
-
-    
+    pygame.draw.rect(screen, WHITE, (playerx,playery,40,10))
+    pygame.draw.rect(screen, WHITE, (playerx + 18,playery - 8, 4,8))
     pygame.display.flip()
-
+    
+    
     
     clock.tick(60)
 
