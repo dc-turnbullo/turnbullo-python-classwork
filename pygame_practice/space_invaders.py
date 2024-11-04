@@ -58,7 +58,11 @@ print(arr)
 
 
 def spawnprojectile(project,counter):
-    pygame.draw.rect(screen, WHITE, (project[counter].x,project[counter].y,project[counter].size)) 
+    project[counter].y = playery - 8
+    project[counter].x = playerx + 18
+    counter +=1
+    counter = counter % 50
+    return counter
 
 
 
@@ -74,7 +78,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    if event.type == pygame.KEYDOWN:
+    if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
         if event.key == pygame.K_RIGHT:
             playerx +=1
         elif event.key == pygame.K_LEFT:
@@ -84,7 +88,7 @@ while not done:
            print("true")
 
     for i in range(rows):
-        project[i].y +=1
+        project[i].y -=1
         
 
     
@@ -108,8 +112,9 @@ while not done:
     pygame.display.flip()
     
     
-    
+    for i in range(len(project)):
+        pygame.draw.rect(screen, WHITE, (project[i].x,project[i].y,project[i].size,project[i].size)) 
     clock.tick(60)
 
 
-pygame.quit()
+pygame.quit() 
