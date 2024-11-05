@@ -1,24 +1,23 @@
 import pygame
 import random
 
-# Define some colors
 BLACK = 0x000000
 WHITE = 0xFFFFFF
-class bot:
-    def __init__(self,x_pos,y_pos,velocity,size) -> None:
+
+class Bot:
+    def __init__(self, x_pos, y_pos, velocity, size, on):
         self.x = x_pos
         self.y = y_pos
         self.vel = velocity
         self.size = size
-    #endrecord
+        self.on = on
 
-class projectile:
-    def __init__(self,x_pos,y_pos,on,size) -> None:
+class Projectile:
+    def __init__(self, x_pos, y_pos, on, size):
         self.x = x_pos
         self.y = y_pos
         self.on = on
         self.size = size
-
 
 counter = 0
 xcoord = 0
@@ -30,91 +29,81 @@ playery = 430
 
 pygame.init()
 
-# Set the width and height of the screen [width, height]
 size = (700, 450)
 screen = pygame.display.set_mode(size)
-
 pygame.display.set_caption("Space Invaders")
 
-
 rows = 50
-arr = [None for j in range(rows)]  
-project = [None for j in range(rows)]
+arr = [None for j in range(rows)]
+project = [Projectile(-100, 900, False, 5) for i in range(rows)]
 
-
-for row in range(rows):  
-     project[row] = projectile(-100,900,0,5)
-     
-
-for row in range(rows):  
-     arr[row] = bot(xcoord,ycoord,3,5)
-     xcoord = xcoord + 15
-     if xcoord > 600:
+for row in range(rows):
+    arr[row] = Bot(xcoord, ycoord, 3, 5, True)
+    xcoord += 15
+    if xcoord > 600:
         xcoord = 0
-        ycoord = ycoord + 10
-     
-#next row       
-print(arr)  
+        ycoord += 10
 
-
-def spawnprojectile(project,counter):
-    project[counter].y = playery - 8
-    project[counter].x = playerx + 18
-    counter +=1
-    counter = counter % 50
+def spawn_projectile(project, counter):
+    if not project[counter].on:
+        project[counter].y = playery - 8
+        project[counter].x = playerx + 18
+        project[counter].on = True
+        counter = (counter + 1) % rows
     return counter
 
-
-
 done = False
-
-
 clock = pygame.time.Clock()
 
-# -------- Main Program Loop -----------
 while not done:
-    # --- Main event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-
-    if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                counter = spawn_projectile(project, counter)
+    
+    
+    
+    if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT:
-            playerx +=1
+            playerx += 5
         elif event.key == pygame.K_LEFT:
-            playerx -=1
-        elif event.key == pygame.K_SPACE:
-           counter = spawnprojectile(project,counter)
-           print("true")
+            playerx -= 5
+
+
+
 
     for i in range(rows):
-        project[i].y -=1
-        
+        if project[i].on:
+            project[i].y -= 5
+            if project[i].y < 0:
+                project[i].on = False
 
-    
-    screen.fill(BLACK)
-    
     for i in range(len(arr)):
-            arr[i].x += bot_v
-    count  = count + 1
+        arr[i].x += bot_v
+    count += 1
 
     if count > 100:
         count = 0
         bot_v *= -1
         for i in range(len(arr)):
             arr[i].y += 20
-            
-    for i in range(len(arr)):
-        pygame.draw.rect(screen, WHITE, (arr[i].x,arr[i].y,arr[i].size,arr[i].size)) 
 
-    pygame.draw.rect(screen, WHITE, (playerx,playery,40,10))
-    pygame.draw.rect(screen, WHITE, (playerx + 18,playery - 8, 4,8))
+    screen.fill(BLACK)
+    
+    for bot in arr:
+        if bot.on:
+            pygame.draw.rect(screen, WHITE, (bot.x, bot.y, bot.size, bot.size))
+    
+    pygame.draw.rect(screen, WHITE, (playerx, playery, 40, 10))
+
+    for proj in project:
+        if proj.on:
+            pygame.draw.rect(screen, WHITE, (proj.x, proj.y, proj.size, proj.size))
+
     pygame.display.flip()
     
-    
-    for i in range(len(project)):
-        pygame.draw.rect(screen, WHITE, (project[i].x,project[i].y,project[i].size,project[i].size)) 
     clock.tick(60)
 
-
-pygame.quit() 
+pygame.quit()
