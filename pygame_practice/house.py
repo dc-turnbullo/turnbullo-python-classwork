@@ -1,6 +1,6 @@
 ### SRC - Good work, but read my comments?
 import pygame
-import math ### SRC - Did you use this for a previous version?
+import math ### SRC - Did you use this for a previous version? OT - it is
 pygame.init()
 
 size = (700, 400)
@@ -35,6 +35,7 @@ while not done:
         (2) Black screen
         (3) Draw shapes
         (4) Clock.tick
+        OT - it is just the order that i coppied the original starting code from that arcade games website with, i think i do it differently in the other projects
     '''
     clock.tick(fps)
     screen.fill(white)
