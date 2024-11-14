@@ -71,7 +71,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    # --- Game logic should go here
+    
 
     screen.fill(BLACK)
     

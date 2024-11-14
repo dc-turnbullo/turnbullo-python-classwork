@@ -23,4 +23,3 @@ print(mydog.getcolour())
 mydog.setcolour("brown")
 print(mydog.getcolour())
 mydog.bark(3)
-        
