@@ -23,27 +23,27 @@ class Block(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def moveright(self):
-        self.rect.x +=5
+        self.rect.x +=3
     
     def moveleft(self):
-        self.rect.x -= 5
+        self.rect.x -= 3
     
     def moveup(self):
-        self.rect.y -= 5
+        self.rect.y -= 3
     
     def movedown(self):
-        self.rect.y += 5
+        self.rect.y += 3
     
     def reset_pos(self):
        
-        self.rect.y = random.randrange(-300, -20)
-        self.rect.x = random.randrange(0, size[0])
+        self.rect.y = 490
+        self.rect.x = 0
     
     def update(self):
       
         self.rect.y += 5
         
-        if self.rect.y > 410:
+        if self.rect.y <0 or self.rect.x > 900:
             self.reset_pos()
 #endofclassblock
 
