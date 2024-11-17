@@ -28,7 +28,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Snow")
 
 
-rows = 1000
+rows = 5000
 arr = [None for j in range(rows)]  
 
   
@@ -57,7 +57,7 @@ while not done:
     for i in range(len(arr)):
         if arr[i].y > size[1]:
             arr[i].y = 0
-            arr[i].x = random.randint(0,size[0]-1)
+            arr[i].x = random.randint(-300,size[0]+300)
         else:
             arr[i].y = arr[i].y + arr[i].vel
     #next i
