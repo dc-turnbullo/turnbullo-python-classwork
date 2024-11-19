@@ -7,7 +7,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
-
+BLUE = 0x0000ff
 pygame.init()
 
 size = (700, 500)
@@ -52,8 +52,16 @@ class Block(pygame.sprite.Sprite):
         if self.rect.y >500:
             self.reset_pos()
 #endofclassblock
+score = 0
 
-
+def endscreentext(score):
+    font = pygame.font.Font('freesansbold.ttf', 32)
+    text = font.render(f"Game Over your score = {score}", True, GREEN, BLUE)
+    textRect = text.get_rect()
+    textRect.center = ( 700// 2, 400 // 2)
+    screen.fill(BLACK)
+    screen.blit(text, textRect)
+ 
 block_list = pygame.sprite.Group()
 all_sprites_list = pygame.sprite.Group()
 
@@ -66,10 +74,10 @@ for i in range(50):
     all_sprites_list.add(block)
 
 
-score = 0
+
 player = Block(RED,20,15)
 all_sprites_list.add(player)
-
+timeleft = 3600
 done = False
 
 clock = pygame.time.Clock()
@@ -115,9 +123,16 @@ while not done:
         block.update()
     all_sprites_list.draw(screen)
     player.movemouse()
+    
+    
+    while timeleft <= 0:
+        endscreentext(score)
+        pygame.display.flip()
     pygame.display.flip()
     
 
     clock.tick(60)
-    
+    timeleft -=1
+
+
 pygame.quit()
