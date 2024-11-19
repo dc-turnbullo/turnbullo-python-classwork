@@ -1,8 +1,6 @@
 import pygame
 import random
-#rom pygame.sprite import _Group
 
-# Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -51,16 +49,29 @@ class Block(pygame.sprite.Sprite):
         
         if self.rect.y >500:
             self.reset_pos()
-#endofclassblock
-score = 0
 
-def endscreentext(score):
-    font = pygame.font.Font('freesansbold.ttf', 32)
-    text = font.render(f"Game Over your score = {score}", True, GREEN, BLUE)
-    textRect = text.get_rect()
+score = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+def timeleftdpl(timeleft,font):
+    tml = font.render(f"Time left: {timeleft//60}", True, GREEN, WHITE)
+    textRect = tml.get_rect()
+    textRect.center = ( 100, 40)
+    screen.blit(tml, textRect)
+
+
+
+def endscreentext(score,font):
+    endtext = font.render(f"Game Over your score = {score}", True, GREEN, BLUE)
+    textRect = endtext.get_rect()
     textRect.center = ( 700// 2, 400 // 2)
     screen.fill(BLACK)
-    screen.blit(text, textRect)
+    screen.blit(endtext, textRect)
+    for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+    pygame.display.flip()
+
  
 block_list = pygame.sprite.Group()
 all_sprites_list = pygame.sprite.Group()
@@ -121,13 +132,16 @@ while not done:
         block.rand_pos()
     for block in block_list:
         block.update()
+   
+   
+    timeleftdpl(timeleft,font)
     all_sprites_list.draw(screen)
     player.movemouse()
     
     
     while timeleft <= 0:
-        endscreentext(score)
-        pygame.display.flip()
+        endscreentext(score,font)
+        
     pygame.display.flip()
     
 
