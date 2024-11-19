@@ -34,16 +34,22 @@ class Block(pygame.sprite.Sprite):
     def movedown(self):
         self.rect.y += 3
     
+    def movemouse(self):
+        pos = pygame.mouse.get_pos()
+        self.rect.midtop = pos
+
     def reset_pos(self):
        
-        self.rect.y = 490
-        self.rect.x = 0
+        self.rect.y = 0
     
+    def rand_pos(self):
+        self.rect.y = random.randrange(size[1])
+        self.rect.x = random.randrange(size[0])    
     def update(self):
-      
-        self.rect.y += 5
         
-        if self.rect.y <0 or self.rect.x > 900:
+        self.rect.y += 1
+        
+        if self.rect.y >500:
             self.reset_pos()
 #endofclassblock
 
@@ -68,24 +74,9 @@ done = False
 
 clock = pygame.time.Clock()
 
-# -------- Main Program Loop -----------
-while not done:
-    # --- Main event loop
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
 
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_RIGHT:
-            player.moveright()
-        elif event.key == pygame.K_LEFT:
-            player.moveleft()
-        elif event.key == pygame.K_UP:
-            player.moveup()
-        elif event.key == pygame.K_DOWN:
-            player.movedown()
+def gameplay():
     screen.fill(WHITE)
-   
     blocks_hit_list = pygame.sprite.spritecollide(player, block_list, False)
     
     # Check the list of collisions.
@@ -94,12 +85,39 @@ while not done:
         print(score)
     
         # Reset block to the top of the screen to fall again.
-        block.reset_pos()
-   
+        block.rand_pos()
+    for block in block_list:
+        block.update()
     all_sprites_list.draw(screen)
-
+    player.movemouse()
     pygame.display.flip()
 
-    clock.tick(60)
+# -------- Main Program Loop -----------
+while not done:
+    # --- Main event loop
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
 
+
+
+    screen.fill(WHITE)
+    blocks_hit_list = pygame.sprite.spritecollide(player, block_list, False)
+    
+    # Check the list of collisions.
+    for block in blocks_hit_list:
+        score += 1
+        print(score)
+    
+        # Reset block to the top of the screen to fall again.
+        block.rand_pos()
+    for block in block_list:
+        block.update()
+    all_sprites_list.draw(screen)
+    player.movemouse()
+    pygame.display.flip()
+    
+
+    clock.tick(60)
+    
 pygame.quit()
