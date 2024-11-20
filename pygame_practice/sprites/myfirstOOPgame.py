@@ -7,6 +7,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = 0x0000ff
 pygame.init()
+randcolour = False
+
 
 size = (700, 500)
 screen = pygame.display.set_mode(size)
@@ -49,6 +51,9 @@ class Block(pygame.sprite.Sprite):
         
         if self.rect.y >500:
             self.reset_pos()
+    
+    def changecolour(self,colour):
+        self.image.fill(colour)
 
 score = 0
 font = pygame.font.Font('freesansbold.ttf', 32)
@@ -59,6 +64,10 @@ def timeleftdpl(timeleft,font):
     textRect.center = ( 100, 40)
     screen.blit(tml, textRect)
 
+def dopaminetime():
+    for Blocks in block_list:
+        colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        Block.changecolour(colour)
 
 
 def endscreentext(score,font):
@@ -83,6 +92,12 @@ for i in range(50):
 
     block_list.add(block)
     all_sprites_list.add(block)
+
+dopamine = Block(BLUE,20,20)
+dopamine.rect.x = random.randrange(size[0])
+dopamine.rect.y = random.randrange(size[1])
+block_list.add(dopamine)
+all_sprites_list.add(dopamine)
 
 
 
@@ -111,14 +126,14 @@ def gameplay():
     player.movemouse()
     pygame.display.flip()
 
-# -------- Main Program Loop -----------
+# -------- Main Program Loop --------------------
 while not done:
     # --- Main event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
 
-
+    
 
     screen.fill(WHITE)
     blocks_hit_list = pygame.sprite.spritecollide(player, block_list, False)
@@ -127,7 +142,16 @@ while not done:
     for block in blocks_hit_list:
         score += 1
         print(score)
-    
+        if block == dopamine:
+            randcolour = True
+            startscore = timeleft
+        
+        if randcolour == True:
+            dopaminetime()
+            if startscore - score > 600:
+                randcolour = False
+
+
         # Reset block to the top of the screen to fall again.
         block.rand_pos()
     for block in block_list:
