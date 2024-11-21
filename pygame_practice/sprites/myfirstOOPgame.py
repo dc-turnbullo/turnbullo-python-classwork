@@ -103,7 +103,7 @@ all_sprites_list.add(dopamine)
 
 player = Block(RED,20,15)
 all_sprites_list.add(player)
-timeleft = 3600
+timeleft = 36
 done = False
 
 clock = pygame.time.Clock()
@@ -146,10 +146,10 @@ while not done:
             randcolour = True
             startscore = timeleft
         
-        if randcolour == True:
-            dopaminetime()
-            if startscore - score > 600:
-                randcolour = False
+        # if randcolour == True:
+        #     dopaminetime()
+        #     if startscore - score > 600:
+        #         randcolour = False
 
 
         # Reset block to the top of the screen to fall again.
