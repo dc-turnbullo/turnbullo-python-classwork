@@ -35,7 +35,10 @@ class stack:
             print("push successful")
 
     def peek(self):
-        print("value on the top of the stack is: "+ self.stack[self.sp])
+        if self.isempty():
+            print("stack is empty!")
+        else:
+            print("value on the top of the stack is: "+ self.stack[self.sp])
     
     def __repr__(self):
         
