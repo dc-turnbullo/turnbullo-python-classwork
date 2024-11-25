@@ -103,7 +103,7 @@ all_sprites_list.add(dopamine)
 
 player = Block(RED,20,15)
 all_sprites_list.add(player)
-timeleft = 36
+timeleft = 3600
 done = False
 
 clock = pygame.time.Clock()
