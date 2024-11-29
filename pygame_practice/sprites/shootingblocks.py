@@ -80,7 +80,7 @@ def timeleftdpl(timeleft,font):
     screen.blit(tml, textRect)
 
 def dopaminetime():
-    for Blocks in block_list:
+    for Block in block_list:
         colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         Block.changecolour(colour)
 
@@ -150,12 +150,13 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            bullet = Projectile()
-            bullet.rect.x = player.rect.x
-            bullet.rect.y = player.rect.y
-            all_sprites_list.add(bullet)
-            bullet_list.add(bullet)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                bullet = Projectile()
+                bullet.rect.x = player.rect.x + 5
+                bullet.rect.y = player.rect.y
+                all_sprites_list.add(bullet)
+                bullet_list.add(bullet)
         
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT: 
@@ -167,46 +168,58 @@ while not done:
         
     screen.fill(WHITE)
 
-    
+   
+
+
+
     for bullet in bullet_list:
         blocks_hit_list = pygame.sprite.spritecollide(bullet, block_list, False)
     
+    
+
+            
         for block in blocks_hit_list:
             score += 1
             bullet_list.remove(bullet)
             all_sprites_list.remove(bullet)
-            print(score)
+            
             block.rand_pos()
             if block == dopamine:
                 randcolour = True
-                startscore = timeleft
+                starttl = timeleft
+
         
         if bullet.rect.y < -10:
             bullet_list.remove(bullet)
             all_sprites_list.remove(bullet)
         
-        # if randcolour == True:
-        #     dopaminetime()
-        #     if startscore - score > 600:
-        #         randcolour = False
+    
+    
+    if randcolour == True:
+        dopaminetime()
+        if (starttl - timeleft > 60) and (timeleft % 20 == 0):
+
+            randcolour = False
+            for block in block_list:
+                block.changecolour(BLACK)
+            
+            dopamine.changecolour(BLUE)
+                
 
 
-        
-
-   
-   
-    timeleftdpl(timeleft,font)
+    
     all_sprites_list.draw(screen)
     
     
     
     while timeleft <= 0:
         endscreentext(score,font)
-        
-    pygame.display.flip()
-    
     block_list.update()
     bullet_list.update()
+    
+    
+    pygame.display.flip()
+    
     
     clock.tick(60)
     timeleft -=1
