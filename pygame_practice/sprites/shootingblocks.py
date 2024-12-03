@@ -157,13 +157,16 @@ while not done:
                 bullet.rect.y = player.rect.y
                 all_sprites_list.add(bullet)
                 bullet_list.add(bullet)
+            
         
+    
+    
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT: 
             player.moveright()
         elif event.key == pygame.K_LEFT:
             player.moveleft()
-
+    
 
         
     screen.fill(WHITE)
@@ -210,7 +213,7 @@ while not done:
     
     all_sprites_list.draw(screen)
     
-    
+    timeleftdpl(timeleft,font)
     
     while timeleft <= 0:
         endscreentext(score,font)
