@@ -155,6 +155,9 @@ while not done:
             elif event.key == pygame.K_LEFT:
                 player.move(leftvelo)
                 print("moving left")
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                player.move(defvelo)
         
     
     screen.fill(WHITE)
