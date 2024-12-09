@@ -118,24 +118,6 @@ done = False
 
 clock = pygame.time.Clock()
 
-
-def gameplay():
-    screen.fill(WHITE)
-    blocks_hit_list = pygame.sprite.spritecollide(player, block_list, True)
-    
-    
-    for block in blocks_hit_list:
-        score += 1
-        print(score)
-    
-        
-    
-    for block in block_list:
-        block.update()
-    all_sprites_list.draw(screen)
-    player.movemouse()
-    pygame.display.flip()
-
 # -------- Main Program Loop --------------------
 while not done:
     # --- Main event loop
@@ -156,9 +138,14 @@ while not done:
                 player.move(leftvelo)
                 print("moving left")
         elif event.type == pygame.KEYUP:
+<<<<<<< Updated upstream
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                 player.move(defvelo)
         
+=======
+            if event.key != pygame.K_SPACE:
+                player.move(defvelo)
+>>>>>>> Stashed changes
     
     screen.fill(WHITE)
 
