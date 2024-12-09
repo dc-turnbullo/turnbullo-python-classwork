@@ -70,14 +70,12 @@ def alterpns(pns,num):
 def nextlowestpallindrome(num):
     strnum = str(num)
     midpoint = len(strnum)//2
-    if len(strnum) == 3 and test3(strnum) == True:
-        return True
-    elif len(strnum) == 3:
-        return False
-    if len(strnum) == 2 and test2(strnum) == True:
-        return True
-    elif len(strnum) == 2:
-        return False
+    if len(strnum) == 3:
+        return strnum[0] + strnum[1] + strnum[0]
+    
+    if len(strnum) == 2:
+        return strnum[0] + strnum[0]
+   
     
 
     if len(strnum) == 1:
@@ -100,24 +98,34 @@ def pallindromeexceptionfixer(num):
     pass
 
 palindromicfound = False
-
+smallpnd = 0
+mediumpnd = 0
 userinput = int(input("enter a number to find the palindromic something or others of"))
+tempuserinput = userinput - userinput//10
+counter = len(pns) -1
+# print(tempuserinput)
+largepnd = int(nextlowestpallindrome(tempuserinput))
+
+
+while counter >=0:
+    if largepnd + pns[counter] < userinput:
+        mediumpnd = pns[counter]
+        break
+    counter = counter -1
 tempuserinput = userinput
-alteredpns = alterpns(pns,userinput)
-# for i in range(1,7):
-#     try:
-#         largepallindrome = int(nextlowestpallindrome(userinput))
-#     except:
-#         largepallindrome = int(nextlowestpallindrome(userinput - userinput//100))
-#     for i in range(len(pns)):
-#         for j in range(len(pns)):
-#             if largepallindrome - pns[i]-pns[j] == 0:
-#                 palindromicfound == True
-#                 mediumpallindrome = pns[i]
-#                 smallpallindrome = pns[j]
+tempuserinput = tempuserinput - largepnd - mediumpnd
+for i in range(len(pns)):
+    if tempuserinput - pns[i] == 0:
+        smallpnd = pns[i]
+        break
+if checkpallindrome(userinput):
+    print(userinput)
+elif smallpnd == 0:
+    print(mediumpnd,largepnd)
+else:
+    print(smallpnd,mediumpnd,largepnd)
 
-# print(largepallindrome)
-# print(mediumpallindrome)
-# print(smallpallindrome)
+print("oliver Turnbull, dulwich college")
 
-print(alteredpns)
+
+
