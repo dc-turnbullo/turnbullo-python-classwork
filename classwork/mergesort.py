@@ -26,7 +26,7 @@ while p1 < len(arr1) and p2 < len(arr2):
     else: 
         newarr.append(arr2[p2])
         p2 += 1
-
+ 
 
 while p1 < len(arr1):
     newarr.append(arr1[p1])
