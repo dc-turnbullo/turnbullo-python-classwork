@@ -1,13 +1,12 @@
 """
-Pygame Bullet Hell (Expanded Play Area & Random Mixed Attacks)
--------------------------------------------------------------
+Pygame Bullet Hell (Expanded Play Area & Random Mixed Attacks + Timer)
+----------------------------------------------------------------------
 Features:
+- Displays time survived
 - Smaller player radius (6px)
 - Expanded play area larger than the visible screen; player can move offscreen
 - All three attack types occur randomly and continuously, overlapping and cycling
 - Dash (LShift) and slow time (Space) retained
-
-Run: python pygame_bullet_hell.py
 """
 
 import math
@@ -25,13 +24,8 @@ BULLET_COLOR = (255, 90, 90)
 BULLET_RADIUS = 5
 BULLET_DAMAGE = 1
 
-# Attack timings
-INCOMING_SPAWN_INTERVAL = 0.08
-EXPLOSION_INTERVAL = 2.0
-SPIRAL_SPAWN_INTERVAL = 0.04
-
 # Expanded play area
-PLAY_AREA_MARGIN = 400  # player can move beyond screen in this radius
+PLAY_AREA_MARGIN = 400
 
 # Slow time
 SLOW_FACTOR = 0.28
@@ -160,6 +154,7 @@ spiral_angle = 0.0
 
 slow_energy = SLOW_MAX
 slow_active = False
+survival_time = 0.0  # <- NEW timer
 
 
 def spawn_incoming(player_pos):
@@ -217,9 +212,11 @@ def draw_hud(surf):
     rect = pygame.Rect(0, SCREEN_H - h, SCREEN_W, h)
     pygame.draw.rect(surf, HUD_BG, rect)
 
+    # Health
     health_text = font.render(f"Health: {player.health}/{PLAYER_MAX_HEALTH}", True, WHITE)
     surf.blit(health_text, (pad, SCREEN_H - h + pad))
 
+    # Slow bar
     bar_w = 240
     bar_h = 12
     x = pad
@@ -228,17 +225,23 @@ def draw_hud(surf):
     filled = int((slow_energy / SLOW_MAX) * bar_w)
     pygame.draw.rect(surf, (100, 200, 100), (x, y, filled, bar_h))
 
+    # Dash cooldown
     cd = max(0.0, player.dash_cooldown)
     cd_text = font.render(f"Dash CD: {cd:.1f}s", True, WHITE)
     surf.blit(cd_text, (x + 300, SCREEN_H - h + pad))
 
+    # Time survived
+    time_text = font.render(f"Time Survived: {survival_time:.1f}s", True, (180, 180, 255))
+    surf.blit(time_text, (SCREEN_W - 220, SCREEN_H - h + pad))
+
+    # Game over
     if player.health <= 0:
         go = big_font.render("YOU DIED - R to Restart", True, (220, 50, 50))
         surf.blit(go, (SCREEN_W // 2 - go.get_width() // 2, SCREEN_H // 2 - go.get_height() // 2))
 
 
 def reset_game():
-    global bullets, all_sprites, player, incoming_timer, explosion_timer, spiral_timer, spiral_angle, slow_energy
+    global bullets, all_sprites, player, incoming_timer, explosion_timer, spiral_timer, spiral_angle, slow_energy, survival_time
     bullets.empty()
     all_sprites.empty()
     player = Player()
@@ -246,6 +249,7 @@ def reset_game():
     incoming_timer = explosion_timer = spiral_timer = 0.0
     spiral_angle = 0.0
     slow_energy = SLOW_MAX
+    survival_time = 0.0  # reset timer
 
 
 # Main loop
@@ -265,6 +269,10 @@ while running:
                 reset_game()
             if e.key == pygame.K_LSHIFT:
                 player.dash()
+
+    # Update survival time
+    if player.health > 0:
+        survival_time += dt
 
     # Slow time
     if keys[pygame.K_SPACE] and slow_energy > 0 and player.health > 0:
@@ -295,11 +303,11 @@ while running:
             for _ in range(random.randint(1, 2)):
                 point = Vector2(random.randint(0, SCREEN_W), random.randint(0, SCREEN_H))
                 spawn_explosion(point, count=random.randint(20, 48), speed=random.randint(150, 230))
-            explosion_timer += random.uniform(1.2, 2.5)
+            explosion_timer += random.uniform(1.8, 3.0)
 
         if spiral_timer <= 0:
             for _ in range(random.randint(1, 2)):
-                spawn_spiral(Vector2(random.randint(0, SCREEN_W), random.randint(0, SCREEN_H//2)), spiral_angle, count=2, speed=180)
+                spawn_spiral(Vector2(random.randint(0, SCREEN_W), random.randint(0, SCREEN_H // 2)), spiral_angle, count=2, speed=180)
                 spiral_angle += 0.3
             spiral_timer += random.uniform(0.02, 0.05)
 
@@ -326,7 +334,6 @@ while running:
         screen.blit(player.image, (player.rect.x - cam_x, player.rect.y - cam_y))
 
     draw_hud(screen)
-
     pygame.display.flip()
 
 pygame.quit()
