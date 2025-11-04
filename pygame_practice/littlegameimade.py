@@ -1,17 +1,18 @@
 """
-Pygame Bullet Hell (Expanded Play Area & Random Mixed Attacks + Timer)
-----------------------------------------------------------------------
+Pygame Bullet Hell (Expanded Play Area & Random Mixed Attacks + Timer + Best Time)
+----------------------------------------------------------------------------------
 Features:
-- Displays time survived
+- Displays time survived and best time
+- Saves best time persistently to best_time.txt
 - Smaller player radius (6px)
-- Expanded play area larger than the visible screen; player can move offscreen
-- All three attack types occur randomly and continuously, overlapping and cycling
-- Dash (LShift) and slow time (Space) retained
+- Expanded play area larger than the visible screen
+- Dash (LShift) and slow time (Space)
 """
 
 import math
 import random
 import pygame
+import os
 from pygame.math import Vector2
 
 # -------- CONFIG --------
@@ -24,7 +25,6 @@ BULLET_COLOR = (255, 90, 90)
 BULLET_RADIUS = 5
 BULLET_DAMAGE = 1
 
-# Expanded play area
 PLAY_AREA_MARGIN = 400
 
 # Slow time
@@ -50,9 +50,35 @@ pygame.display.set_caption("Bullet Hell - Random Mixed Attacks | Dash: LSHIFT | 
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 20)
 big_font = pygame.font.SysFont(None, 36)
+small_font = pygame.font.SysFont(None, 26)
+
+BEST_TIME_FILE = "best_time.txt"
+
 
 def clamp(x, a, b):
     return max(a, min(b, x))
+
+
+# --- Best time handling ---
+def load_best_time():
+    if os.path.exists(BEST_TIME_FILE):
+        try:
+            with open(BEST_TIME_FILE, "r") as f:
+                return float(f.read().strip())
+        except:
+            return 0.0
+    return 0.0
+
+
+def save_best_time(new_time):
+    try:
+        with open(BEST_TIME_FILE, "w") as f:
+            f.write(f"{new_time:.2f}")
+    except:
+        pass
+
+
+best_time = load_best_time()
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -151,10 +177,10 @@ incoming_timer = 0.0
 explosion_timer = 0.0
 spiral_timer = 0.0
 spiral_angle = 0.0
-
 slow_energy = SLOW_MAX
 slow_active = False
-survival_time = 0.0  # <- NEW timer
+survival_time = 0.0
+best_time = load_best_time()
 
 
 def spawn_incoming(player_pos):
@@ -234,10 +260,14 @@ def draw_hud(surf):
     time_text = font.render(f"Time Survived: {survival_time:.1f}s", True, (180, 180, 255))
     surf.blit(time_text, (SCREEN_W - 220, SCREEN_H - h + pad))
 
-    # Game over
+    # Game over message
     if player.health <= 0:
-        go = big_font.render("YOU DIED - R to Restart", True, (220, 50, 50))
-        surf.blit(go, (SCREEN_W // 2 - go.get_width() // 2, SCREEN_H // 2 - go.get_height() // 2))
+        go = big_font.render("YOU DIED", True, (220, 50, 50))
+        surf.blit(go, (SCREEN_W // 2 - go.get_width() // 2, SCREEN_H // 2 - go.get_height()))
+        time_msg = small_font.render(f"Time Survived: {survival_time:.1f}s  |  Best: {best_time:.1f}s", True, (200, 200, 255))
+        surf.blit(time_msg, (SCREEN_W // 2 - time_msg.get_width() // 2, SCREEN_H // 2 + 5))
+        restart = font.render("Press R to Restart", True, WHITE)
+        surf.blit(restart, (SCREEN_W // 2 - restart.get_width() // 2, SCREEN_H // 2 + 35))
 
 
 def reset_game():
@@ -249,10 +279,10 @@ def reset_game():
     incoming_timer = explosion_timer = spiral_timer = 0.0
     spiral_angle = 0.0
     slow_energy = SLOW_MAX
-    survival_time = 0.0  # reset timer
+    survival_time = 0.0
 
 
-# Main loop
+# --- MAIN LOOP ---
 running = True
 while running:
     dt = clock.tick(FPS) / 1000.0
@@ -273,6 +303,9 @@ while running:
     # Update survival time
     if player.health > 0:
         survival_time += dt
+    elif survival_time > best_time:
+        best_time = survival_time
+        save_best_time(best_time)
 
     # Slow time
     if keys[pygame.K_SPACE] and slow_energy > 0 and player.health > 0:
@@ -321,8 +354,6 @@ while running:
 
     # Drawing
     screen.fill(BG)
-
-    # camera offset (center view on player)
     cam_x = clamp(player.pos.x - SCREEN_W / 2, -PLAY_AREA_MARGIN, PLAY_AREA_MARGIN)
     cam_y = clamp(player.pos.y - SCREEN_H / 2, -PLAY_AREA_MARGIN, PLAY_AREA_MARGIN)
 
