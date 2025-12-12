@@ -1,12 +1,12 @@
 def binarySearch(t, arr, lp, rp):
-    while rp != lp:
-        mp = (rp - lp) // 2
+    while lp <= rp:
+        mp = (rp + lp) // 2
         if arr[mp] == t:
             return mp
         elif t < arr[mp]:
-            rp = mp
+            rp = mp -1
         else:
-            lp = mp
+            lp = mp +1
     if arr[mp] == t:
         return mp
     else:
@@ -19,21 +19,20 @@ def binarySearch(t, arr, lp, rp):
 
 
 def binarySearchRec(t, arr, lp, rp):
-    mp = (rp - lp) // 2
-    if rp == lp:
+    if lp > rp: 
         return -1
-    elif arr[mp] == t:
+
+    mp = (lp + rp) // 2
+
+    if arr[mp] == t:
         return mp
+    elif t < arr[mp]:
+        return binarySearchRec(t, arr, lp, mp - 1)
     else:
-        if t < arr[mp]:
-            rp = mp - 1
-            return binarySearchRec(t, arr[: (mp - 1)], lp, rp)
-        else:
-            lp = mp + 1
-            return binarySearchRec(t, arr[(mp + 1) :], lp, rp)
+        return binarySearchRec(t, arr, mp + 1, rp)
 
 
 array = [1, 5, 7, 12, 15, 22, 45]
 lpt = 0
-rpt = len(array)
-print(binarySearch(7, array, lpt, rpt))
+rpt = len(array) -1
+print(binarySearchRec(15, array, lpt, rpt))
