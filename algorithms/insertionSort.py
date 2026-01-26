@@ -13,15 +13,11 @@ def insertionsort(arr, n):
 
 def insertionsortrec(arr, n):
 
-
-
     if n <= 1:
         return arr
-
-
     insertionsortrec(arr, n - 1)
-
-    # Insert the nth element into the sorted part
+    
+    # insert
     key = arr[n - 1]
     j = n - 2
 
@@ -37,4 +33,4 @@ def insertionsortrec(arr, n):
 
 
 arr = [15,22,2,55,4,9,16,24,67,103,9]
-print(insertionsortrec(arr, len(arr)))
+print(insertionsort(arr, len(arr)))
