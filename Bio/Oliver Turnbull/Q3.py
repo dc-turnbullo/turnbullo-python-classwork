@@ -1,8 +1,11 @@
+from functools import lru_cache
+
 userinp = int(input())
 
 strinp = str(userinp)
 start = 10
 
+@lru_cache(maxsize=None)
 def comparedigits(a,b):
     c = int(a)
     d = int(b)
@@ -10,7 +13,7 @@ def comparedigits(a,b):
         return 1
     else:
         return 0
-
+@lru_cache(maxsize=None)
 def checkforraindrop(num):
     strnum = str(num)
     tot = 0
